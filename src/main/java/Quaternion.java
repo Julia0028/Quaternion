@@ -1,5 +1,4 @@
-import static java.lang.Math.sqrt;
-import static java.lang.Math.pow;
+import static java.lang.Math.*;
 
 public final class Quaternion {
     private final double real;
@@ -7,13 +6,15 @@ public final class Quaternion {
     private final double j;
     private final double k;
 
-    public Quaternion (double real, double i, double j, double k) {
+    public Quaternion(double real, double i, double j, double k) {
         this.real = real;
         this.i = i;
         this.j = j;
         this.k = k;
     }
 
+
+    //сложение
     public Quaternion quaternionSum(Quaternion other) {
         double newReal = real + other.real;
         double new_i = i + other.i;
@@ -22,6 +23,7 @@ public final class Quaternion {
         return new Quaternion(newReal, new_i, new_j, new_k);
     }
 
+    //вычитание
     public Quaternion quaternionMinus(Quaternion other) {
         double newReal = real - other.real;
         double new_i = i - other.i;
@@ -30,7 +32,8 @@ public final class Quaternion {
         return new Quaternion(newReal, new_i, new_j, new_k);
     }
 
-    public Quaternion scalarMultiplication (double scalar) {
+    //умножение на скаляр
+    public Quaternion scalarMultiplication(double scalar) {
         double newReal = real * scalar;
         double new_i = i * scalar;
         double new_j = j * scalar;
@@ -38,7 +41,8 @@ public final class Quaternion {
         return new Quaternion(newReal, new_i, new_j, new_k);
     }
 
-    public Quaternion quaternionMultiplication (Quaternion other) {
+    //умножение
+    public Quaternion quaternionMultiplication(Quaternion other) {
         double newReal = real * other.real - i * other.i - j * other.j - k * other.k;
         double new_i = real * other.i + other.real * i + j * other.k - other.j * k;
         double new_j = real * other.j + other.real * j + k * other.i - other.k * i;
@@ -46,15 +50,18 @@ public final class Quaternion {
         return new Quaternion(newReal, new_i, new_j, new_k);
     }
 
+    //сопряжение
     public Quaternion conjugation() {
         return new Quaternion(real, -i, -j, -k);
     }
 
-    public double module () {
+    //модуль
+    public double module() {
         return sqrt(pow(real, 2) + pow(i, 2) + pow(j, 2) + pow(k, 2));
     }
 
-    public Quaternion rationing () {
+    //нормирование
+    public Quaternion norm() {
         double denominator = this.module();
         if (denominator != 0) {
             double newReal = real / denominator;
@@ -65,7 +72,8 @@ public final class Quaternion {
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
-    public Quaternion div () {
+    //деление
+    public Quaternion div() {
         double denominator = pow(this.module(), 2);
         Quaternion quaternion = this.conjugation();
         if (denominator != 0) {
@@ -77,11 +85,13 @@ public final class Quaternion {
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
-    public Quaternion quaternionScalar () {
+    //скалярная часть
+    public Quaternion quaternionScalar() {
         return new Quaternion(real, 0, 0, 0);
     }
 
-    public Quaternion quaternionVector () {
+    //векторная часть
+    public Quaternion quaternionVector() {
         return new Quaternion(0, i, j, k);
     }
 
@@ -97,4 +107,33 @@ public final class Quaternion {
     public String toString() {
         return (real + " " + i + " " + j + " " + k);
     }
-}
+
+    /* public class AxisAngle {
+         private double angle;
+         private double x;
+         private double y;
+         private double z;
+
+         public Quaternion createQuaternion(AxisAngle vector) {
+             double mod = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+             double rotation = cos(vector.angle / 2);
+             double new_i = x / mod * sin(vector.angle / 2);
+             double new_j = y / mod * sin(vector.angle / 2);
+             double new_k = z / mod * sin(vector.angle / 2);
+             return new Quaternion(rotation, new_i, new_j, new_k);
+         }
+     }
+
+    public AxisAngle createAxisAngle(Quaternion q) {
+        Quaternion norm = q.norm();
+        AxisAngle ax = new AxisAngle();
+        ax.angle = 2 * acos(q.real);
+        ax.x = norm.i / sin(ax.angle / 2);
+        ax.y = norm.j / sin(ax.angle / 2);
+        ax.z = norm.k / sin(ax.angle / 2);
+        return ax;
+
+
+    }*/
+    }
+

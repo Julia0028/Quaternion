@@ -44,9 +44,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void rationing() {
+    public void norm() {
         assertEquals(new Quaternion(0.5, 0.5, 0.5, 0.5),
-                new Quaternion(2, 2, 2, 2).rationing());
+                new Quaternion(2, 2, 2, 2).norm());
     }
 
     @Test
