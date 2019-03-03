@@ -17,41 +17,41 @@ public final class Quaternion {
     //сложение
     public Quaternion quaternionSum(Quaternion other) {
         double newReal = real + other.real;
-        double new_i = i + other.i;
-        double new_j = j + other.j;
-        double new_k = k + other.k;
-        return new Quaternion(newReal, new_i, new_j, new_k);
+        double newI = i + other.i;
+        double newJ = j + other.j;
+        double newK = k + other.k;
+        return new Quaternion(newReal, newI, newJ, newK);
     }
 
     //вычитание
     public Quaternion quaternionMinus(Quaternion other) {
         double newReal = real - other.real;
-        double new_i = i - other.i;
-        double new_j = j - other.j;
-        double new_k = k - other.k;
-        return new Quaternion(newReal, new_i, new_j, new_k);
+        double newI = i - other.i;
+        double newJ = j - other.j;
+        double newK = k - other.k;
+        return new Quaternion(newReal, newI, newJ, newK);
     }
 
     //умножение на скаляр
     public Quaternion scalarMultiplication(double scalar) {
         double newReal = real * scalar;
-        double new_i = i * scalar;
-        double new_j = j * scalar;
-        double new_k = k * scalar;
-        return new Quaternion(newReal, new_i, new_j, new_k);
+        double newI = i * scalar;
+        double newJ = j * scalar;
+        double newK = k * scalar;
+        return new Quaternion(newReal, newI, newJ, newK);
     }
 
     //умножение
     public Quaternion quaternionMultiplication(Quaternion other) {
         double newReal = real * other.real - i * other.i - j * other.j - k * other.k;
-        double new_i = real * other.i + other.real * i + j * other.k - other.j * k;
-        double new_j = real * other.j + other.real * j + k * other.i - other.k * i;
-        double new_k = real * other.k + other.real * k + i * other.j - other.i * j;
-        return new Quaternion(newReal, new_i, new_j, new_k);
+        double newI = real * other.i + other.real * i + j * other.k - other.j * k;
+        double newJ = real * other.j + other.real * j + k * other.i - other.k * i;
+        double newK = real * other.k + other.real * k + i * other.j - other.i * j;
+        return new Quaternion(newReal, newI, newJ, newK);
     }
 
     //сопряжение
-    public Quaternion conjugation() {
+    public Quaternion inverse() {
         return new Quaternion(real, -i, -j, -k);
     }
 
@@ -64,35 +64,28 @@ public final class Quaternion {
     public Quaternion norm() {
         double denominator = this.module();
         if (denominator != 0) {
-            double newReal = real / denominator;
-            double new_i = i / denominator;
-            double new_j = j / denominator;
-            double new_k = k / denominator;
-            return new Quaternion(newReal, new_i, new_j, new_k);
+            return this.scalarMultiplication(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
     //деление
-    public Quaternion div() {
-        double denominator = pow(this.module(), 2);
-        Quaternion quaternion = this.conjugation();
+    public Quaternion div(Quaternion other) {
+        double denominator = pow(other.module(), 2);
         if (denominator != 0) {
-            double newReal = quaternion.real / denominator;
-            double new_i = quaternion.i / denominator;
-            double new_j = quaternion.j / denominator;
-            double new_k = quaternion.k / denominator;
-            return new Quaternion(newReal, new_i, new_j, new_k);
+           return this
+                   .quaternionMultiplication(other.inverse())
+                   .scalarMultiplication(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
     //скалярная часть
-    public Quaternion quaternionScalar() {
-        return new Quaternion(real, 0, 0, 0);
+    public double quaternionScalar() {
+        return real;
     }
 
     //векторная часть
-    public Quaternion quaternionVector() {
-        return new Quaternion(0, i, j, k);
+    public Veсtor quaternionVector() {
+        return new Veсtor( i, j, k);
     }
 
     public boolean equals(Object obj) {
@@ -108,32 +101,15 @@ public final class Quaternion {
         return (real + " " + i + " " + j + " " + k);
     }
 
-    /* public class AxisAngle {
-         private double angle;
-         private double x;
-         private double y;
-         private double z;
+    //утилита: определение оси и угла поворота
+    public Coordinates createCoord() {
+        Quaternion normQuaternion = this.scalarMultiplication(1 / this.module());
+        double angle = 2* acos(normQuaternion.real);
+        double x = 2* asin(normQuaternion.i);
+        double y = 2* asin(normQuaternion.j);
+        double z = 2* asin(normQuaternion.k);
+        return new Coordinates(angle, x, y, z);
 
-         public Quaternion createQuaternion(AxisAngle vector) {
-             double mod = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
-             double rotation = cos(vector.angle / 2);
-             double new_i = x / mod * sin(vector.angle / 2);
-             double new_j = y / mod * sin(vector.angle / 2);
-             double new_k = z / mod * sin(vector.angle / 2);
-             return new Quaternion(rotation, new_i, new_j, new_k);
-         }
-     }
-
-    public AxisAngle createAxisAngle(Quaternion q) {
-        Quaternion norm = q.norm();
-        AxisAngle ax = new AxisAngle();
-        ax.angle = 2 * acos(q.real);
-        ax.x = norm.i / sin(ax.angle / 2);
-        ax.y = norm.j / sin(ax.angle / 2);
-        ax.z = norm.k / sin(ax.angle / 2);
-        return ax;
-
-
-    }*/
     }
+}
 

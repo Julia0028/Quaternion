@@ -1,3 +1,5 @@
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -32,9 +34,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void conjugation() {
+    public void inverse() {
         assertEquals(new Quaternion(4, -8, -12, -16),
-                new Quaternion(4, 8, 12, 16).conjugation());
+                new Quaternion(4, 8, 12, 16).inverse());
     }
 
     @Test
@@ -51,19 +53,28 @@ public class QuaternionTest {
 
     @Test
     public void div() {
-        assertEquals(new Quaternion(0.125, -0.125, -0.125, -0.125),
-                new Quaternion(2, 2, 2, 2).div());
+        assertEquals(new Quaternion(0.33333333333333326, 0, 0, 0),
+                new Quaternion(10, -5, 0, 15)
+                        .div(new Quaternion(30, -15, 0, 45)));
     }
 
     @Test
     public void quaternionScalar() {
-        assertEquals(new Quaternion(4, 0, 0, 0),
-                new Quaternion(4, 6, 3, 2).quaternionScalar());
+        assertEquals(4,
+                new Quaternion(4, 6, 3, 2).quaternionScalar(), 1e-10);
     }
 
     @Test
     public void quaternionVector() {
-        assertEquals(new Quaternion(0, 6, 3, 2),
-                new Quaternion(4, 6, 3, 2).quaternionVector());
+        assertEquals(new Veсtor(2, 3, 4),
+                new Quaternion(1, 2, 3, 4).quaternionVector());
     }
-}
+
+
+    @Test
+    public void createCoord() {
+        assertEquals(new Coordinates(3.141592653589793, -3.141592653589793, 0, 0),
+                new Quaternion(0, -1, 0, 0).createCoord());
+    }
+
+    }
