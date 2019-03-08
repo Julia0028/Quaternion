@@ -1,5 +1,4 @@
 import static java.lang.Math.abs;
-import static java.lang.Math.max;
 
 public class Veсtor {
         private double a;
@@ -42,9 +41,9 @@ public class Veсtor {
         if (this == obj) return true;
         if (obj instanceof Veсtor) {
             Veсtor other = (Veсtor) obj;
-            return  abs(a - other.a) <= Math.ulp(max(a, other.a)) &&
-                    abs(b - other.b) <= Math.ulp(max(b, other.b)) &&
-                    abs(c - other.c) <= Math.ulp(max(c, other.c));
+            return  abs(a - other.a) <= Math.ulp(a) &&
+                    abs(b - other.b) <= Math.ulp(b) &&
+                    abs(c - other.c) <= Math.ulp(c);
         }
         return false;
     }

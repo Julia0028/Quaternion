@@ -74,7 +74,8 @@ public class QuaternionTest {
 
     @Test
     public void getAxis() {
-        assertTrue(new Quaternion(1, 0, 0, 0).getAxis().round(new Veсtor(0, 0, 0)));
+        assertTrue(new Quaternion(1, 0, 0, 0).getAxis()
+                .round(new Veсtor(0, 0, 0)));
     }
 
     @Test

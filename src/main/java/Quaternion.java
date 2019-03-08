@@ -102,10 +102,10 @@ public final class Quaternion {
         if (this == obj) return true;
         if (obj instanceof Quaternion) {
             Quaternion other = (Quaternion) obj;
-            return  abs(real - other.real) <= (Math.ulp(max(real, other.real))) &&
-                    abs(i - other.i) <= (Math.ulp(max(i, other.i))) &&
-                    abs(j - other.j) <= (Math.ulp(max(j, other.j))) &&
-                    abs(k - other.k) <= (Math.ulp(max(k, other.k)));
+            return  abs(real - other.real) <= (Math.ulp(real)) &&
+                    abs(i - other.i) <= (Math.ulp(i)) &&
+                    abs(j - other.j) <= (Math.ulp(j)) &&
+                    abs(k - other.k) <= (Math.ulp(k));
 
         }
         return false;
