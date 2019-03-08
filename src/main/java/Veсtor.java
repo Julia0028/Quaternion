@@ -1,5 +1,6 @@
+import static java.lang.Math.abs;
+import static java.lang.Math.max;
 
-//вспомогательный класс для реализации метода "возвращение векторной части"
 public class Veсtor {
         private double a;
         private double b;
@@ -24,4 +25,28 @@ public class Veсtor {
             }
             return false;
         }
+
+        public double getA (){
+            return a;
+        }
+
+        public double getB() {
+            return b;
+        }
+
+        public double getC() {
+            return c;
+        }
+
+    public boolean round(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Veсtor) {
+            Veсtor other = (Veсtor) obj;
+            return  abs(a - other.a) <= Math.ulp(max(a, other.a)) &&
+                    abs(b - other.b) <= Math.ulp(max(b, other.b)) &&
+                    abs(c - other.c) <= Math.ulp(max(c, other.c));
+        }
+        return false;
     }
+
+}

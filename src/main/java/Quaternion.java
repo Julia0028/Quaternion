@@ -15,7 +15,7 @@ public final class Quaternion {
 
 
     //сложение
-    public Quaternion quaternionSum(Quaternion other) {
+    public Quaternion plus(Quaternion other) {
         double newReal = real + other.real;
         double newI = i + other.i;
         double newJ = j + other.j;
@@ -24,7 +24,7 @@ public final class Quaternion {
     }
 
     //вычитание
-    public Quaternion quaternionMinus(Quaternion other) {
+    public Quaternion minus(Quaternion other) {
         double newReal = real - other.real;
         double newI = i - other.i;
         double newJ = j - other.j;
@@ -33,7 +33,7 @@ public final class Quaternion {
     }
 
     //умножение на скаляр
-    public Quaternion scalarMultiplication(double scalar) {
+    public Quaternion scalarMultiply(double scalar) {
         double newReal = real * scalar;
         double newI = i * scalar;
         double newJ = j * scalar;
@@ -42,7 +42,7 @@ public final class Quaternion {
     }
 
     //умножение
-    public Quaternion quaternionMultiplication(Quaternion other) {
+    public Quaternion quaternionMultiply(Quaternion other) {
         double newReal = real * other.real - i * other.i - j * other.j - k * other.k;
         double newI = real * other.i + other.real * i + j * other.k - other.j * k;
         double newJ = real * other.j + other.real * j + k * other.i - other.k * i;
@@ -64,7 +64,7 @@ public final class Quaternion {
     public Quaternion norm() {
         double denominator = this.module();
         if (denominator != 0) {
-            return this.scalarMultiplication(1 / denominator);
+            return this.scalarMultiply(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
@@ -73,21 +73,22 @@ public final class Quaternion {
         double denominator = pow(other.module(), 2);
         if (denominator != 0) {
            return this
-                   .quaternionMultiplication(other.inverse())
-                   .scalarMultiplication(1 / denominator);
+                   .quaternionMultiply(other.inverse())
+                   .scalarMultiply(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
     //скалярная часть
-    public double quaternionScalar() {
+    public double getScalar() {
         return real;
     }
 
     //векторная часть
-    public Veсtor quaternionVector() {
+    public Veсtor getVector() {
         return new Veсtor( i, j, k);
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj instanceof Quaternion) {
@@ -97,19 +98,57 @@ public final class Quaternion {
         return false;
     }
 
+    public boolean round(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Quaternion) {
+            Quaternion other = (Quaternion) obj;
+            return  abs(real - other.real) <= (Math.ulp(max(real, other.real))) &&
+                    abs(i - other.i) <= (Math.ulp(max(i, other.i))) &&
+                    abs(j - other.j) <= (Math.ulp(max(j, other.j))) &&
+                    abs(k - other.k) <= (Math.ulp(max(k, other.k)));
+
+        }
+        return false;
+    }
+
+   @Override
     public String toString() {
         return (real + " " + i + " " + j + " " + k);
     }
 
-    //утилита: определение оси и угла поворота
-    public Coordinates createCoord() {
-        Quaternion normQuaternion = this.scalarMultiplication(1 / this.module());
-        double angle = 2* acos(normQuaternion.real);
-        double x = 2* asin(normQuaternion.i);
-        double y = 2* asin(normQuaternion.j);
-        double z = 2* asin(normQuaternion.k);
-        return new Coordinates(angle, x, y, z);
+    //утилита:
 
+    // определение оси
+    public Veсtor getAxis() {
+        double denominator = this.module();
+        if (denominator != 0) {
+            Quaternion normQuaternion = this.scalarMultiply(1 / denominator);
+            double x = 2 * asin(normQuaternion.i);
+            double y = 2 * asin(normQuaternion.j);
+            double z = 2 * asin(normQuaternion.k);
+            return new Veсtor(x, y, z);
+        } else throw new ArithmeticException("Denominator cannot be zero");
+    }
+
+    //определение угла поворота
+    public double getAngle() {
+        double denominator = this.module();
+        if (denominator != 0) {
+            Quaternion normQuaternion = this.scalarMultiply(1 / this.module());
+            return 2 * acos(normQuaternion.real);
+        } else throw new ArithmeticException("Denominator cannot be zero");
+    }
+
+    //создание кватерниона с помощью оси и угла поворота
+    public static Quaternion createQuaternion(double angle, Veсtor axis) {
+        double length = sqrt(pow(axis.getA(), 2) + pow(axis.getB(), 2) + pow(axis.getC(), 2));
+        if (length != 0) {
+            double real = cos(angle / 2);
+            double i = axis.getA() * sin(angle / 2) / length;
+            double j = axis.getB() * sin(angle / 2) / length;
+            double k = axis.getC() * sin(angle / 2) / length;
+            return new Quaternion(real, i, j, k);
+        } else throw new ArithmeticException("Denominator cannot be zero");
     }
 }
 
