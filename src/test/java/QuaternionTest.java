@@ -25,14 +25,14 @@ public class QuaternionTest {
     @Test
     public void scalarMultiply() {
         assertEquals(new Quaternion(4, 8, 12, 16),
-                new Quaternion(1, 2, 3, 4).scalarMultiply(4));
+                new Quaternion(1, 2, 3, 4).times(4));
     }
 
     @Test
     public void quaternionMultiply() {
         assertEquals(new Quaternion(-26, 15, 49, 26),
                 new Quaternion(1, 4, 6, 7)
-                        .quaternionMultiply(new Quaternion(5, 3, 2, 1)));
+                        .times(new Quaternion(5, 3, 2, 1)));
     }
 
     @Test
@@ -51,13 +51,13 @@ public class QuaternionTest {
     public void norm() {
         Quaternion q = new Quaternion(1, -5, 0, 4);
         assertTrue(q.norm()
-                .round(new Quaternion(1.0 / q.module(), -5.0 / q.module(), 0.0 / q.module(), 4.0 / q.module())));
+                .approximatelyEquals(new Quaternion(1.0 / q.module(), -5.0 / q.module(), 0.0 / q.module(), 4.0 / q.module()), 2));
     }
 
     @Test
     public void div() {
         assertTrue(new Quaternion(1, -5, 0, 4).div(new Quaternion(3, -3, 0, 1))
-                .round(new Quaternion(22.0 / 19,-12.0 / 19,7.0 / 19,11.0 / 19)));
+                .approximatelyEquals(new Quaternion(22.0 / 19,-12.0 / 19,7.0 / 19,11.0 / 19), 2));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class QuaternionTest {
     @Test
     public void createQuaternion() {
         assertTrue(Quaternion.createQuaternion(0, new Veсtor(0, 0, 1))
-                .round(new Quaternion(1, 0, 0,0)
+                .approximatelyEquals(new Quaternion(1, 0, 0,0), 2
         ));
     }
 

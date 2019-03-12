@@ -33,7 +33,7 @@ public final class Quaternion {
     }
 
     //умножение на скаляр
-    public Quaternion scalarMultiply(double scalar) {
+    public Quaternion times(double scalar) {
         double newReal = real * scalar;
         double newI = i * scalar;
         double newJ = j * scalar;
@@ -42,7 +42,7 @@ public final class Quaternion {
     }
 
     //умножение
-    public Quaternion quaternionMultiply(Quaternion other) {
+    public Quaternion times(Quaternion other) {
         double newReal = real * other.real - i * other.i - j * other.j - k * other.k;
         double newI = real * other.i + other.real * i + j * other.k - other.j * k;
         double newJ = real * other.j + other.real * j + k * other.i - other.k * i;
@@ -64,7 +64,7 @@ public final class Quaternion {
     public Quaternion norm() {
         double denominator = this.module();
         if (denominator != 0) {
-            return this.scalarMultiply(1 / denominator);
+            return this.times(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
@@ -73,8 +73,8 @@ public final class Quaternion {
         double denominator = pow(other.module(), 2);
         if (denominator != 0) {
            return this
-                   .quaternionMultiply(other.inverse())
-                   .scalarMultiply(1 / denominator);
+                   .times(other.inverse())
+                   .times(1 / denominator);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
 
@@ -98,14 +98,14 @@ public final class Quaternion {
         return false;
     }
 
-    public boolean round(Object obj) {
+    public boolean approximatelyEquals(Object obj, double a) {
         if (this == obj) return true;
         if (obj instanceof Quaternion) {
             Quaternion other = (Quaternion) obj;
-            return  abs(real - other.real) <= (Math.ulp(real)) &&
-                    abs(i - other.i) <= (Math.ulp(i)) &&
-                    abs(j - other.j) <= (Math.ulp(j)) &&
-                    abs(k - other.k) <= (Math.ulp(k));
+            return  abs(real - other.real) <= a * (Math.ulp(real)) &&
+                    abs(i - other.i) <= a * (Math.ulp(i)) &&
+                    abs(j - other.j) <= a * (Math.ulp(j)) &&
+                    abs(k - other.k) <= a * (Math.ulp(k));
 
         }
         return false;
@@ -122,7 +122,7 @@ public final class Quaternion {
     public Veсtor getAxis() {
         double denominator = this.module();
         if (denominator != 0) {
-            Quaternion normQuaternion = this.scalarMultiply(1 / denominator);
+            Quaternion normQuaternion = this.times(1 / denominator);
             double x = 2 * asin(normQuaternion.i);
             double y = 2 * asin(normQuaternion.j);
             double z = 2 * asin(normQuaternion.k);
@@ -134,7 +134,7 @@ public final class Quaternion {
     public double getAngle() {
         double denominator = this.module();
         if (denominator != 0) {
-            Quaternion normQuaternion = this.scalarMultiply(1 / this.module());
+            Quaternion normQuaternion = this.times(1 / this.module());
             return 2 * acos(normQuaternion.real);
         } else throw new ArithmeticException("Denominator cannot be zero");
     }
