@@ -37,13 +37,13 @@ public class Veсtor {
             return c;
         }
 
-    public boolean round(Object obj) {
+    public boolean round(Object obj, double n) {
         if (this == obj) return true;
         if (obj instanceof Veсtor) {
             Veсtor other = (Veсtor) obj;
-            return  abs(a - other.a) <= Math.ulp(a) &&
-                    abs(b - other.b) <= Math.ulp(b) &&
-                    abs(c - other.c) <= Math.ulp(c);
+            return  abs(a - other.a) <= n * Math.ulp(a) &&
+                    abs(b - other.b) <= n * Math.ulp(b) &&
+                    abs(c - other.c) <= n * Math.ulp(c);
         }
         return false;
     }

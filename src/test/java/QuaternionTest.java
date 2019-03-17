@@ -8,6 +8,9 @@ import static org.junit.Assert.*;
 
 public class QuaternionTest {
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
     public void plus() {
         assertEquals(new Quaternion(1, 2, 3, 4),
@@ -75,7 +78,7 @@ public class QuaternionTest {
     @Test
     public void getAxis() {
         assertTrue(new Quaternion(1, 0, 0, 0).getAxis()
-                .round(new Veсtor(0, 0, 0)));
+                .round(new Veсtor(0, 0, 0), 2));
     }
 
     @Test
@@ -90,10 +93,6 @@ public class QuaternionTest {
                 .approximatelyEquals(new Quaternion(1, 0, 0,0), 2
         ));
     }
-
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void normException() throws ArithmeticException {
